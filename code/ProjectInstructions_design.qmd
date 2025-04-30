@@ -88,8 +88,60 @@ Before each chunk, describe the steps being performed in that chunk. For example
 
 If a chunk produces output, like printing a data frame, statistical summary, a plot, ANOVA table, etc., make sure to write text interpreting what you see and how you can/will use that information to move forward to the next steps in the workflow.  
 
+## a) Setup 
+Here is where we load the packages we will use. 
+```{r setup}
+#install.packages("broom")
+
+# Loading packages
+library(tidyverse) # for data wrangling and plotting
+library(janitor) # to clean data
+library(car) # for Anova function
+library(broom) # for model residuals extraction
+library(emmeans) # for model mean extraction
+library(multcomp) # for pairwise comparison letter display
+
+```
+
+Here is were we will load the data
+```{r data import}
+
+pre_df <- read.csv("../Data/Peanuts_dataset.csv")
+
+pre_df
+```
+
+## b) EDA tables 
+```{r summary}
+summary(pre_df)
+```
+
+```{r glimpse}
+glimpse(pre_df)
+```
+# c) Wrangling
+```{r}
+pre_dfc <-  pre_df %>% clean_names()
+
+pre_dfc
+```
+
+We converted our treatments (humidity and temperature) to factors
+```{r}
+pre_dfw <- pre_dfc %>%
+  mutate(rep = factor(rep),
+         temperature_c = factor(temperature_c),
+         humidity = factor(humidity)
+         ) %>% 
+  mutate(trtname = paste0(temperature_c, "+" , humidity))
+
+pre_dfw
+```
 
 
+```{r}
+summary(pre_dfw)
+```
 
 # Team work in GitHub  
 Whether you are working with your future-self or as duos, make sure to stage, commit, and push after finishing each of the sub-sections above. When committing, write commit messages that are short and descriptive (e.g., finished wrangling).  
