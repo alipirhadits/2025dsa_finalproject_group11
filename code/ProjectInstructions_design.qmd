@@ -326,6 +326,27 @@ crd_cld_selected <- crd_cld_humid %>%
 crd_cld_selected
 ```
 
+## g) Final plot  
+Let's plot our results, including both **raw data** (for allowing our audience to inspect data distribution) and **statistical model summary (i.e., letter separation)** for inference purposes.   
+```{r}
+final_plot <- ggplot() +
+  geom_boxplot(data = pre_dfw, aes(x = humidity, y = pressure_pa, color = humidity)) +
+  geom_label(data = crd_cld_selected, aes(x = humidity, y = emmean, label = letter)) +
+  labs(title = "Pressure across Humidity Levels",
+       x = "Humidity",
+       y = "Pressure (Pa)") +
+  theme_minimal()
+
+final_plot
+```
+# Conclution
+In conclusion, the interaction between temperature and relative humidity did not significantly affect the internal microclimate of peanut storage units (pressure distribution) which is in contrast with our alternative hypothesis, hence we fail to reject our null hypothesis.
+
+## k) # Save the plot
+```{r}
+ggsave("../output/interactionWithComparasion_pressure.png", plot = final_plot, width = 8, height = 5)
+```
+
 
 # Team work in GitHub  
 Whether you are working with your future-self or as duos, make sure to stage, commit, and push after finishing each of the sub-sections above. When committing, write commit messages that are short and descriptive (e.g., finished wrangling).  
