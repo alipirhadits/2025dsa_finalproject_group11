@@ -257,6 +257,40 @@ ggplot(crd_resid, aes(x=.fitted, y=.studresid))+
 
 The residual looks normally distributed as there is homogeneity of variance in the plot.
 
+## Residual normality
+Here we are checking for the residual homoscedasticity
+```{r}
+ggplot(crd_resid, aes(sample = .studresid)) +
+  stat_qq() + 
+  stat_qq_line()
+```
+##  Interpretation
+The residual looks normally distributed.
+
+```{r}
+ggplot(crd_resid, aes(x = .studresid)) +
+  geom_density() +
+  scale_x_continuous(breaks = c(-3,0,3), limits = c(-3,3))
+```
+
+## Residual outliers  
+- For this, we use the **fitted vs. residual plot**.
+```{r}
+ggplot(crd_resid, aes(x=.fitted, y=.studresid))+
+  geom_hline(yintercept = 0, color="red")+
+  geom_point(shape = 21,
+             fill = "purple", 
+             size = 3,
+             alpha = .7)+
+  geom_smooth()+
+  geom_hline(yintercept = c(-3,3), color = "red")+
+  theme_bw()
+```
+
+All residuals are within the [-3, 3] interval, so nothing to worry here.  
+Now that model assumptions have been checked and met, we can proceed to using the model for inference.  
+
+
 # Team work in GitHub  
 Whether you are working with your future-self or as duos, make sure to stage, commit, and push after finishing each of the sub-sections above. When committing, write commit messages that are short and descriptive (e.g., finished wrangling).  
 
