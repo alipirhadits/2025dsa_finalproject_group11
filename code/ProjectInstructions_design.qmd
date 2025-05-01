@@ -288,7 +288,43 @@ ggplot(crd_resid, aes(x=.fitted, y=.studresid))+
 ```
 
 All residuals are within the [-3, 3] interval, so nothing to worry here.  
-Now that model assumptions have been checked and met, we can proceed to using the model for inference.  
+Now that model assumptions have been checked and met, we can proceed to using the model for inference. 
+
+# h) Model means
+The next step in the workflow is extracting the model means.
+```{r means for only humidity}
+crd_means_humid <- emmeans(crd_mod, ~humidity)
+
+crd_means_humid
+```
+
+# i) Pairwise comparisons  
+Now that we extracted means, we then perform pairwise comparisons among them. 
+```{r pairwise for only humidity}
+crd_cld_humid <- cld(crd_means_humid,
+                   reversed = T,  
+                   Letters = letters,  
+                   adjust = "none" 
+                   )
+
+
+crd_cld_humid
+```
+
+## Interpretation
+
+Since only humidity was significant, pairwise comparison and data interpretation was performed on only the main effect of humidity of pressure. From the pairwise comparison, we can see that there was no significant difference between humidity at 50 and 55 and between 55 and 60. Furthermore, no significant difference was observed between relative humidity at 65 and 70, and between 75 and 80. In summary, the pressure in the stored peanut decreased with increasing relative humidity.
+
+Here we tested the hypothesis of everything compared to everything else, which corresponds to our first method using `:`.
+
+```{r selected pwc}
+crd_cld_selected <- crd_cld_humid %>%
+  as.data.frame() %>%
+  mutate(letter = trimws(.group)) %>%
+  mutate(trtname = paste0(humidity))
+
+crd_cld_selected
+```
 
 
 # Team work in GitHub  
