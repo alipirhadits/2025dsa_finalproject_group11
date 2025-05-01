@@ -91,6 +91,9 @@ If a chunk produces output, like printing a data frame, statistical summary, a p
 ## a) Setup 
 Here is where we load the packages we will use. 
 ```{r setup}
+#| message: false
+#| warning: false
+
 #install.packages("broom")
 
 # Loading packages
