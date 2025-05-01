@@ -203,7 +203,59 @@ crd_mod <- lm(pressure_pa ~ temperature_c + humidity +
 summary(crd_mod)
 ```
 
+# f) ANOVA table  
+The `Anova()` function allows us to use **type 3 sum of squares**.  
 
+```{r}
+Anova(crd_mod, type =3)
+```
+# Interpretation
+The main of effect temperature as well as the interaction between temperature and humidity did not significantly affect pressure in stored peanut. However, In our case, we have a **significant effect of relative humidity of pressure**, and the interaction between temperature and humidity are not significant. We will only focus on relative humidity since it is the only treatment that is significant.
+
+# g) Linear model assumptions  
+## Extracting residuals
+First, let's extract our model residuals, and also create studentized residuals. 
+```{r crd_resid}
+crd_resid <- augment(crd_mod) %>% 
+  mutate(.studresid = rstudent(crd_mod))
+
+crd_resid
+```
+
+## Residual independence
+
+Here we are checking for the residual independence
+```{r }
+ggplot(crd_resid, aes(x = .fitted, y = .studresid)) + 
+  
+  geom_point(shape = 21,
+             fill = "purple",
+             size = 3,
+             alpha = 0.7) +
+  geom_hline(yintercept = c(-3,0,3), color = "red") +
+  geom_smooth()
+```
+# Interpretation
+
+The residual looks normally distributed as there is no clear pattern in the plot.
+
+## Residual homoscedasticity 
+Here we are checking for the residual homoscedasticity
+```{r }
+ggplot(crd_resid, aes(x=.fitted, y=.studresid))+
+  geom_hline(yintercept = 0, color="red")+
+  geom_point(shape = 21,
+             fill = "purple", 
+             size = 3,
+             alpha = .7)+
+  geom_smooth()+
+  geom_hline(yintercept = c(-3,3), color = "red")+
+  theme_bw()
+```
+
+## Interpretation
+
+The residual looks normally distributed as there is homogeneity of variance in the plot.
 
 # Team work in GitHub  
 Whether you are working with your future-self or as duos, make sure to stage, commit, and push after finishing each of the sub-sections above. When committing, write commit messages that are short and descriptive (e.g., finished wrangling).  
