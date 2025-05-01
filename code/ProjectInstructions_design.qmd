@@ -143,6 +143,68 @@ pre_dfw
 summary(pre_dfw)
 ```
 
+
+## d) EDA plots
+Here we visualize the effect of temperature on pressure 
+
+```{r}
+ggplot(pre_dfw, aes(x = temperature_c, 
+                    y = pressure_pa,
+                    color = temperature_c)) +
+  geom_boxplot() +
+  geom_jitter() +
+  theme(legend.position = "none")
+```
+### Interpretation 
+From the boxplot, the pressure distribution in the peanut storage tote seem to be higher at a temperature of 5°C, which decreased at the 10°C and increased again at 15°C. However, we can not clearly state the significant effect of temperature on the pressure distribution in the stored peanut without mean separations.
+
+Here we visualize the effect of humidity on pressure
+```{r}
+ggplot(pre_dfw, aes(x = humidity, 
+                    y = pressure_pa,
+                    color = humidity)) +
+  geom_boxplot() +
+  geom_jitter() +
+  theme(legend.position = "none")
+```
+
+### Interpretation
+For the effect of relative humidity on pressure distribution in stored peanuts, we can see a trend of decreasing pressure with increasing relative humidity. That is, as the the relative humidity in stored peanut increases, the pressure distribution in the stored peanut decreases. The significance of the humidity on pressure in stored peanut will be discernible after Anova.
+
+Here we visualize the effect of the interaction between temperature and humidity on pressure
+```{r}
+ggplot(pre_dfw, aes(x = temperature_c,
+                   y = pressure_pa,
+                   color = temperature_c
+                   )) + 
+  geom_boxplot() +
+  geom_jitter() +
+  facet_grid(.~humidity)#+
+  theme(legend.position = "none")
+```
+### Interpretation
+There seem to be no interaction effect of temperature and relative humidity on pressure distribution in stored peanut. There is a general trend of decreasing pressure with increasing relative humidity irrespective of the temperature. However, there is no particular trend in pressure with regards to temperature under different relative humidity treatments.
+
+
+# e) Statistical model  
+## Set-to-zero vs. sum-to-zero  
+
+Below we change the default to sum-to-zero ("contr.sum") before fitting the model.
+```{r}
+# Changing to sum-to-zero contrast
+options(contrasts = c("contr.sum", "contr.poly"))
+
+# Model fitting
+crd_mod <- lm(pressure_pa ~ temperature_c + humidity +
+                temperature_c: humidity,
+              data = pre_dfw)
+
+# Summary
+summary(crd_mod)
+```
+
+
+
 # Team work in GitHub  
 Whether you are working with your future-self or as duos, make sure to stage, commit, and push after finishing each of the sub-sections above. When committing, write commit messages that are short and descriptive (e.g., finished wrangling).  
 
